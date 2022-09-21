@@ -1,11 +1,6 @@
-import {
-  Instance,
-  SnapshotOut,
-  types,
-  flow,
-  getEnv,
-  destroy,
-} from "mobx-state-tree";
+import { Instance, SnapshotOut, types, getEnv, flow } from "mobx-state-tree";
+import { client } from "../../services/client";
+import { hello } from "../../services/hello-svc";
 
 const SessionModel = types.model("Session").props({
   __typename: types.literal("Session"),
@@ -31,9 +26,18 @@ export const RootStoreModel = types
       self.session.seshname = s;
     };
 
+    const getFromServer = flow(function* () {
+      try {
+        self.session.seshname = yield hello(client).then((d) => d.data.hello);
+      } catch (e) {}
+
+      return "ok i guess";
+    });
+
     return {
       afterCreate,
       setSeshname,
+      getFromServer,
     };
   })
   .views((self) => ({

@@ -12,7 +12,6 @@ describe("sv", () => {
     );
 
     const d = await hello(client);
-    console.log(d);
 
     expect(d.data).toEqual({ hello: "hey lo" });
   });
