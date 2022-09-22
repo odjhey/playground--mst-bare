@@ -1,10 +1,8 @@
-import { getParent, types } from "mobx-state-tree";
-import { RootStoreType } from "../be";
+import { types } from "mobx-state-tree";
+import { makeViews } from "../../ui-views";
 
 export const UiModel = types.model("UiModel").views((self) => {
-  const be: RootStoreType = (getParent(self) as any).be;
-
   return {
-    v: () => {},
+    ...makeViews(self),
   };
 });
