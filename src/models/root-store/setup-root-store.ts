@@ -1,10 +1,12 @@
+import { client } from "../../libs/urql-client";
+import { makeClient } from "../../libs/gql-client";
 import { RootStore, RootStoreModel } from "./root-store";
 
 class Environment {
   constructor(_opts: any) {}
   getEnv() {
     return {
-      baseUrl: "",
+      gqlHttpClient: makeClient(client)(),
     };
   }
 }
@@ -21,8 +23,10 @@ export async function createEnvironment(conf: {
   return env;
 }
 
+const EMPTY_SNAPSHOT = { be: {}, ui: {} };
+
 export async function setupRootStore({
-  snapshot,
+  snapshot = EMPTY_SNAPSHOT,
   envSnapshot = { remoteUrl: "" },
 }: {
   snapshot?: any;
@@ -34,18 +38,7 @@ export async function setupRootStore({
   const env = await createEnvironment(envSnapshot);
 
   try {
-    rootStore = RootStoreModel.create(
-      // snapshot ||
-      {
-        session: {
-          __typename: "Session",
-          id: "102938",
-          seshname: "sadlfkj",
-        },
-      },
-
-      env.getEnv()
-    );
+    rootStore = RootStoreModel.create(snapshot, env.getEnv());
   } catch (e) {
     console.error(e);
     return { ok: false, error: e };

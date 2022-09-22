@@ -1,0 +1,48 @@
+type Cooler {
+  id: ID!
+  name: String!
+  barCode: String!
+}
+
+type Sku {
+  id: ID!
+  name: String!
+  code: String!
+}
+
+type Package {
+  id: ID!
+  name: String!
+  code: String!
+  items: [Sku!]!
+}
+
+enum OutletPackageRequireTypeEnum {
+  OPTIONAL
+  MUSTHAVE
+}
+
+type OutletPackage {
+  id: ID!
+  package: Package!
+  requireType: OutletPackageRequireTypeEnum!
+}
+
+type Inventory {
+  id: ID!
+  sku: Sku!
+}
+
+type Outlet {
+  id: ID!
+  name: String!
+  code: String!
+  coolers: [Cooler!]!
+  packages: [OutletPackage!]!
+}
+
+type Query {
+  hello: String!
+  hi: String
+  outlets: [Outlet!]!
+}

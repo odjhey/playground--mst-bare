@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc",
+    "mst-gql-scaffold": "mst-gql --format ts --outDir src/models/be --noReact be-schema.graphql"
   },
   "dependencies": {
     "@urql/core": "^3.0.3",
@@ -14,6 +15,7 @@
     "isomorphic-fetch": "^3.0.0",
     "mobx": "^6.6.2",
     "mobx-state-tree": "^5.1.6",
+    "mst-gql": "^0.17.1",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {

@@ -1,50 +1,21 @@
 import { Instance, SnapshotOut, types, getEnv, flow } from "mobx-state-tree";
-import { client } from "../../services/client";
-import { hello } from "../../services/hello-svc";
-
-const SessionModel = types.model("Session").props({
-  __typename: types.literal("Session"),
-  id: types.identifier,
-  seshname: types.union(types.undefined, types.string),
-});
+import { RootStore as RootStoreBe } from "../be";
+import { UiModel } from "../ui/ui";
 
 export const RootStoreModel = types
   .model("RootStore")
   .props({
-    session: SessionModel,
+    be: RootStoreBe,
+    ui: UiModel,
   })
   .actions((self) => {
     const afterCreate = () => {};
 
-    /*
-    const initEpod = flow(function* initEpod() {
-      self.epod.clearDeliveries();
-    });
-    */
-
-    const setSeshname = (s: string) => {
-      self.session.seshname = s;
-    };
-
-    const getFromServer = flow(function* () {
-      try {
-        self.session.seshname = yield hello(client).then((d) => d.data.hello);
-      } catch (e) {}
-
-      return "ok i guess";
-    });
-
     return {
       afterCreate,
-      setSeshname,
-      getFromServer,
     };
   })
-  .views((self) => ({
-    vEnv: () => {
-      return { baseUrl: getEnv(self)?.baseUrl };
-    },
-  }));
+  .views((self) => ({}));
 
 /**
  * The RootStore instance.
