@@ -1,10 +1,12 @@
+import { makeClient } from "../../libs/urql-client";
+import { client } from "../../services/client";
 import { RootStore, RootStoreModel } from "./root-store";
 
 class Environment {
   constructor(_opts: any) {}
   getEnv() {
     return {
-      baseUrl: "",
+      gqlHttpClient: makeClient(client)(),
     };
   }
 }
@@ -35,8 +37,7 @@ export async function setupRootStore({
 
   try {
     rootStore = RootStoreModel.create(
-      // snapshot ||
-      {
+      snapshot || {
         session: {
           __typename: "Session",
           id: "102938",
