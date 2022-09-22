@@ -8,12 +8,15 @@ import { MSTGQLRef, QueryBuilder, withTypedRefs } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { CoolerModel, CoolerModelType } from "./CoolerModel"
 import { CoolerModelSelector } from "./CoolerModel.base"
+import { OutletPackageModel, OutletPackageModelType } from "./OutletPackageModel"
+import { OutletPackageModelSelector } from "./OutletPackageModel.base"
 import { RootStoreType } from "./index"
 
 
 /* The TypeScript type that explicits the refs to other models in order to prevent a circular refs issue */
 type Refs = {
   coolers: IObservableArray<CoolerModelType>;
+  packages: IObservableArray<OutletPackageModelType>;
 }
 
 /**
@@ -28,6 +31,7 @@ export const OutletModelBase = withTypedRefs<Refs>()(ModelBase
     name: types.union(types.undefined, types.string),
     code: types.union(types.undefined, types.string),
     coolers: types.union(types.undefined, types.array(MSTGQLRef(types.late((): any => CoolerModel)))),
+    packages: types.union(types.undefined, types.array(MSTGQLRef(types.late((): any => OutletPackageModel)))),
   })
   .views(self => ({
     get store() {
@@ -40,6 +44,7 @@ export class OutletModelSelector extends QueryBuilder {
   get name() { return this.__attr(`name`) }
   get code() { return this.__attr(`code`) }
   coolers(builder: string | CoolerModelSelector | ((selector: CoolerModelSelector) => CoolerModelSelector) | undefined) { return this.__child(`coolers`, CoolerModelSelector, builder) }
+  packages(builder: string | OutletPackageModelSelector | ((selector: OutletPackageModelSelector) => OutletPackageModelSelector) | undefined) { return this.__child(`packages`, OutletPackageModelSelector, builder) }
 }
 export function selectFromOutlet() {
   return new OutletModelSelector()
